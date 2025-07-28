@@ -25,7 +25,7 @@ Modern ATS (Applicant Tracking System) - Clean Architecture + Microservices
 
 - [x] **Aşama 1:** Auth mikroservisini oluştur, token üretimi
 - [x] **Aşama 2:** Candidate CRUD + Meilisearch entegrasyonu
-- [ ] **Aşama 3:** Queue servisinde e-posta + log sistemi
+- [x] **Aşama 3:** Queue servisinde e-posta + log sistemi
 - [ ] **Aşama 4:** Frontend bileşenlerini oluştur: Login, CandidateList
 - [ ] **Aşama 5:** .env ile servis bağımlılıklarını tanımla
 - [ ] **Aşama 6:** Test ve docker-compose local ortamları entegre et
@@ -53,12 +53,19 @@ php artisan migrate
 php artisan db:seed
 php artisan serve --port=8002
 
-# Candidate servisini başlat
-cd apps/services/candidate
-composer install
-php artisan migrate
-php artisan db:seed
-php artisan serve --port=8003
+       # Candidate servisini başlat
+       cd apps/services/candidate
+       composer install
+       php artisan migrate
+       php artisan db:seed
+       php artisan serve --port=8003
+
+       # Notification servisini başlat
+       cd apps/services/notification
+       composer install
+       php artisan migrate
+       php artisan db:seed
+       php artisan serve --port=8004
 
 # API Gateway'i başlat
 cd apps/api-gateway

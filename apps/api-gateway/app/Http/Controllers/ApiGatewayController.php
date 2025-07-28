@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\AuthServiceProxy;
 use App\Services\CandidateServiceProxy;
+use App\Services\NotificationServiceProxy;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
@@ -12,7 +13,8 @@ class ApiGatewayController extends Controller
 {
     public function __construct(
         private AuthServiceProxy $authServiceProxy,
-        private CandidateServiceProxy $candidateServiceProxy
+        private CandidateServiceProxy $candidateServiceProxy,
+        private NotificationServiceProxy $notificationServiceProxy
     ) {}
 
     /**
@@ -27,6 +29,7 @@ class ApiGatewayController extends Controller
                     'services' => [
             'auth' => $this->checkAuthService(),
             'candidate' => $this->checkCandidateService(),
+            'notification' => $this->checkNotificationService(),
         ]
         ]);
     }
@@ -116,6 +119,69 @@ class ApiGatewayController extends Controller
     }
 
     /**
+     * Notification routes
+     */
+    public function notificationIndex(Request $request): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->getNotifications($request->all());
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationShow(int $id): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->getNotification($id);
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationStore(Request $request): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->createNotification($request->all());
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationUpdate(Request $request, int $id): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->updateNotification($id, $request->all());
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationDestroy(int $id): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->deleteNotification($id);
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationStats(): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->getNotificationStats();
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationRetry(int $id): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->retryNotification($id);
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationSend(int $id): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->sendNotification($id);
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationProcessScheduled(): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->processScheduledNotifications();
+        return response()->json($response->json(), $response->status());
+    }
+
+    public function notificationCleanup(Request $request): JsonResponse
+    {
+        $response = $this->notificationServiceProxy->cleanupNotifications($request->all());
+        return response()->json($response->json(), $response->status());
+    }
+
+    /**
      * Check auth service health
      */
     private function checkAuthService(): array
@@ -141,6 +207,25 @@ class ApiGatewayController extends Controller
     {
         try {
             $response = Http::timeout(5)->get(env('CANDIDATE_SERVICE_URL', 'http://localhost:8003') . '/api/health');
+            return [
+                'status' => 'ok',
+                'response_time' => $response->handlerStats()['total_time'] ?? null,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Check notification service health
+     */
+    private function checkNotificationService(): array
+    {
+        try {
+            $response = Http::timeout(5)->get(env('NOTIFICATION_SERVICE_URL', 'http://localhost:8004') . '/api/health');
             return [
                 'status' => 'ok',
                 'response_time' => $response->handlerStats()['total_time'] ?? null,

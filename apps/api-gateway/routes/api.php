@@ -44,5 +44,14 @@ Route::prefix('candidates')->group(function () {
 });
 
 Route::prefix('notifications')->group(function () {
-    // TODO: Add notification service routes
+    Route::get('/', [ApiGatewayController::class, 'notificationIndex']);
+    Route::post('/', [ApiGatewayController::class, 'notificationStore']);
+    Route::get('/stats', [ApiGatewayController::class, 'notificationStats']);
+    Route::get('/{id}', [ApiGatewayController::class, 'notificationShow']);
+    Route::put('/{id}', [ApiGatewayController::class, 'notificationUpdate']);
+    Route::delete('/{id}', [ApiGatewayController::class, 'notificationDestroy']);
+    Route::post('/{id}/retry', [ApiGatewayController::class, 'notificationRetry']);
+    Route::post('/{id}/send', [ApiGatewayController::class, 'notificationSend']);
+    Route::post('/process-scheduled', [ApiGatewayController::class, 'notificationProcessScheduled']);
+    Route::post('/cleanup', [ApiGatewayController::class, 'notificationCleanup']);
 }); 
