@@ -40,31 +40,31 @@ class ApiGatewayController extends Controller
     public function authLogin(Request $request): JsonResponse
     {
         $response = $this->authServiceProxy->login($request);
-        return response()->json($response->json(), $response->status());
+        return $response;
     }
 
     public function authRegister(Request $request): JsonResponse
     {
         $response = $this->authServiceProxy->register($request);
-        return response()->json($response->json(), $response->status());
+        return $response;
     }
 
     public function authLogout(Request $request): JsonResponse
     {
         $response = $this->authServiceProxy->logout($request);
-        return response()->json($response->json(), $response->status());
+        return $response;
     }
 
     public function authMe(Request $request): JsonResponse
     {
         $response = $this->authServiceProxy->me($request);
-        return response()->json($response->json(), $response->status());
+        return $response;
     }
 
     public function authRefresh(Request $request): JsonResponse
     {
         $response = $this->authServiceProxy->refresh($request);
-        return response()->json($response->json(), $response->status());
+        return $response;
     }
 
     /**
@@ -72,49 +72,49 @@ class ApiGatewayController extends Controller
      */
     public function candidateIndex(Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->getCandidates($request->all());
+        $response = $this->candidateServiceProxy->getCandidates($request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function candidateShow(int $id): JsonResponse
+    public function candidateShow(int $id, Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->getCandidate($id);
+        $response = $this->candidateServiceProxy->getCandidate($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
     public function candidateStore(Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->createCandidate($request->all());
+        $response = $this->candidateServiceProxy->createCandidate($request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
     public function candidateUpdate(Request $request, int $id): JsonResponse
     {
-        $response = $this->candidateServiceProxy->updateCandidate($id, $request->all());
+        $response = $this->candidateServiceProxy->updateCandidate($id, $request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function candidateDestroy(int $id): JsonResponse
+    public function candidateDestroy(int $id, Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->deleteCandidate($id);
+        $response = $this->candidateServiceProxy->deleteCandidate($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function candidateStats(): JsonResponse
+    public function candidateStats(Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->getCandidateStats();
+        $response = $this->candidateServiceProxy->getCandidateStats($request);
         return response()->json($response->json(), $response->status());
     }
 
     public function candidateUpdateStatus(Request $request, int $id): JsonResponse
     {
-        $response = $this->candidateServiceProxy->updateCandidateStatus($id, $request->status);
+        $response = $this->candidateServiceProxy->updateCandidateStatus($id, $request->status, $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function candidateUpdateContact(int $id): JsonResponse
+    public function candidateUpdateContact(int $id, Request $request): JsonResponse
     {
-        $response = $this->candidateServiceProxy->updateLastContact($id);
+        $response = $this->candidateServiceProxy->updateLastContact($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
@@ -123,61 +123,61 @@ class ApiGatewayController extends Controller
      */
     public function notificationIndex(Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->getNotifications($request->all());
+        $response = $this->notificationServiceProxy->getNotifications($request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationShow(int $id): JsonResponse
+    public function notificationShow(int $id, Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->getNotification($id);
+        $response = $this->notificationServiceProxy->getNotification($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
     public function notificationStore(Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->createNotification($request->all());
+        $response = $this->notificationServiceProxy->createNotification($request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
     public function notificationUpdate(Request $request, int $id): JsonResponse
     {
-        $response = $this->notificationServiceProxy->updateNotification($id, $request->all());
+        $response = $this->notificationServiceProxy->updateNotification($id, $request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationDestroy(int $id): JsonResponse
+    public function notificationDestroy(int $id, Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->deleteNotification($id);
+        $response = $this->notificationServiceProxy->deleteNotification($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationStats(): JsonResponse
+    public function notificationStats(Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->getNotificationStats();
+        $response = $this->notificationServiceProxy->getNotificationStats($request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationRetry(int $id): JsonResponse
+    public function notificationRetry(int $id, Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->retryNotification($id);
+        $response = $this->notificationServiceProxy->retryNotification($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationSend(int $id): JsonResponse
+    public function notificationSend(int $id, Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->sendNotification($id);
+        $response = $this->notificationServiceProxy->sendNotification($id, $request);
         return response()->json($response->json(), $response->status());
     }
 
-    public function notificationProcessScheduled(): JsonResponse
+    public function notificationProcessScheduled(Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->processScheduledNotifications();
+        $response = $this->notificationServiceProxy->processScheduledNotifications($request);
         return response()->json($response->json(), $response->status());
     }
 
     public function notificationCleanup(Request $request): JsonResponse
     {
-        $response = $this->notificationServiceProxy->cleanupNotifications($request->all());
+        $response = $this->notificationServiceProxy->cleanupNotifications($request->all(), $request);
         return response()->json($response->json(), $response->status());
     }
 

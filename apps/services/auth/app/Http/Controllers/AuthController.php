@@ -27,13 +27,9 @@ class AuthController extends Controller
             $result = $this->loginUseCase->execute($request);
 
             return response()->json([
-                'success' => true,
-                'message' => 'Login successful',
-                'data' => [
-                    'user' => $result['user'],
-                    'token' => $result['token'],
-                    'token_type' => $result['token_type'],
-                ]
+                'user' => $result['user'],
+                'token' => $result['token'],
+                'token_type' => $result['token_type'],
             ], 200);
 
         } catch (ValidationException $e) {
@@ -61,13 +57,9 @@ class AuthController extends Controller
             $result = $this->registerUseCase->execute($request);
 
             return response()->json([
-                'success' => true,
-                'message' => 'Registration successful',
-                'data' => [
-                    'user' => $result['user'],
-                    'token' => $result['token'],
-                    'token_type' => $result['token_type'],
-                ]
+                'user' => $result['user'],
+                'token' => $result['token'],
+                'token_type' => $result['token_type'],
             ], 201);
 
         } catch (ValidationException $e) {
@@ -119,10 +111,7 @@ class AuthController extends Controller
             $currentUser = $this->authService->getCurrentUser($user);
 
             return response()->json([
-                'success' => true,
-                'data' => [
-                    'user' => $currentUser,
-                ]
+                'data' => $currentUser,
             ], 200);
 
         } catch (\Exception $e) {

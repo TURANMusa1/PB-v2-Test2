@@ -15,6 +15,16 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+// Health check
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'service' => 'auth',
+        'timestamp' => now()->toISOString(),
+    ]);
+});
+
+// Auth routes
 Route::prefix('auth')->group(function () {
     // Public routes
     Route::post('/login', [AuthController::class, 'login']);
@@ -26,12 +36,4 @@ Route::prefix('auth')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
     });
-});
-
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'service' => 'auth',
-        'timestamp' => now()->toISOString(),
-    ]);
 }); 
